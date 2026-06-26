@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'app_theme.dart';
 import 'models/vital_reading.dart';
 
 class Spo2DetailsPage extends StatefulWidget {
@@ -36,9 +37,11 @@ class _Spo2DetailsPageState extends State<Spo2DetailsPage> {
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 430),
+            constraints: const BoxConstraints(
+              maxWidth: AppLayout.maxContentWidth,
+            ),
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+              padding: AppLayout.pagePadding,
               child: _clientError != null
                   ? _StateMessage(text: _clientError!, isError: true)
                   : StreamBuilder<List<Map<String, dynamic>>>(
@@ -196,15 +199,16 @@ class _MainSpo2Card extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: const Color(0xFFDDF1CB),
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(34),
         boxShadow: const [
           BoxShadow(
             color: Color(0x12000000),
-            blurRadius: 16,
-            offset: Offset(0, 6),
+            blurRadius: 22,
+            spreadRadius: 1,
+            offset: Offset(0, 10),
           ),
         ],
       ),
@@ -231,10 +235,10 @@ class _MainSpo2Card extends StatelessWidget {
           const SizedBox(height: 10),
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: const Color(0xFFFFFFFF),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(18),
             ),
             child: Text(
               'Threshold: ${threshold.toStringAsFixed(0)}%',
@@ -259,10 +263,10 @@ class _WarningBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: strong ? const Color(0xFFFFE8E5) : const Color(0xFFFFF4E8),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(22),
       ),
       child: Row(
         children: [
@@ -298,20 +302,17 @@ class _Spo2ChartCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double minY = spots.first.y;
-    double maxY = spots.first.y;
     for (final s in spots) {
       if (s.y < minY) minY = s.y;
-      if (s.y > maxY) maxY = s.y;
     }
     minY = minY > 90 ? 90 : minY - 1;
-    maxY = maxY < 100 ? 100 : maxY + 1;
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: const Color(0xFFF8FAFC),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(30),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -330,7 +331,7 @@ class _Spo2ChartCard extends StatelessWidget {
             child: LineChart(
               LineChartData(
                 minY: minY,
-                maxY: maxY,
+                maxY: 100,
                 gridData: FlGridData(
                   show: true,
                   drawVerticalLine: false,
@@ -454,10 +455,10 @@ class _InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: const Color(0xFFFFFFFF),
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(color: const Color(0xFFE5E7EB)),
       ),
       child: Text(
